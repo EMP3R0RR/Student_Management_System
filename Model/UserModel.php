@@ -17,6 +17,15 @@ function getUserByEmailAndRole($email, $role) {
         return $user;
     }
 
+
+
+    return false;
+}
+
+function getAdminByEmailAndRole ($email,$role)
+{
+  $con=getConnection();
+
     $query = "SELECT id, role, email, password FROM admins WHERE email = ? AND role = ?";
     $stmt = mysqli_prepare($con, $query);
 
@@ -32,6 +41,7 @@ function getUserByEmailAndRole($email, $role) {
 
 
     return false;
+
 }
 
 

@@ -24,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error'] = "Please enter a password";
              header("Location: ../View/LoginView.php");
              exit();
-    } else {
+    } else{
+        
         $user = getUserByEmailAndRole($email, $role);
 
         if ($user && password_verify($password, $user['password'])) {
@@ -51,6 +52,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
     }
+    // elseif ((!empty($email) || !empty($password))){
+
+    //     $user = getAdminByEmailAndRole($email, $role);
+
+    //     if ($user && password_verify($password, $user['password'])) {
+
+    //         $_SESSION['user_id'] = $user['id'];
+    //         $_SESSION['role'] = $user['role'];
+    //         $_SESSION['email'] = $user['email'];
+
+    //         session_regenerate_id(true);
+
+    //         $role_pages = [
+    //             'student' => '../View/StudentProfileView.php',
+    //             'teacher' => '../View/TeacherProfileView.php',
+    //             'admin'   => '../View/AdminDashboardView.php'
+    //         ];
+
+    //         header("Location: " . $role_pages[$role]);
+    //         exit();
+    //     } else {
+    //         $_SESSION['error'] = "Invalid email, password, or role";
+    //          header("Location: ../View/LoginView.php");
+    //          exit();
+            
+    //     }
+
+    // }
         
       
 }
