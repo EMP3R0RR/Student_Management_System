@@ -188,7 +188,7 @@
   <!-- Landing Header -->
   <div class="landing-header">
     <header>
-      <h1 onclick="window.location.href='landingpage.php'">Student Management System</h1>
+      <h1 onclick="window.location.href='LandingPageView.php'">Student Management System</h1>
       <nav>
         <button onclick="window.location.href='LoginView.php'">LOGIN</button>
         <button onclick="window.location.href='SignupView.php'">SIGNUP</button>

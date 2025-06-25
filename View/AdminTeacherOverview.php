@@ -1,46 +1,5 @@
 <?php
-session_start();
 
-
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 1800)) {
-    session_unset();
-    session_destroy();
-    header("Location: LoginView.php?error=Session expired");
-    exit();
-}
-$_SESSION['last_activity'] = time();
-
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: LoginView.php?error=Please log in");
-    exit();
-}
-
-
-$valid_roles = ['student', 'teacher', 'admin'];
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $valid_roles)) {
-    session_unset();
-    session_destroy();
-    header("Location: LoginView.php?error=Invalid role");
-    exit();
-}
-
-
-if ($_SESSION['role'] !== 'admin') {
-    $profile_pages = [
-        'student' => 'StudentProfileView.php',
-        'teacher' => 'TeacherProfileView.php',
-        'admin' => 'AdminProfileView.php'
-    ];
-    header("Location: " . $profile_pages[$_SESSION['role']] . "?error=Unauthorized access");
-    exit();
-}
-
-
-if (!isset($_SESSION['visited_profile']) || $_SESSION['visited_profile'] !== true) {
-    header("Location: teacherprofile.php?error=Visit profile first");
-    exit();
-}
 ?>
 
 <!DOCTYPE html>

@@ -21,7 +21,6 @@ if (!isset($_SESSION['user_id'])) {
 
 // JSON input check
 if (!isset($_POST['json'])) {
-    http_response_code(400);
     echo "Invalid request";
     exit();
 }

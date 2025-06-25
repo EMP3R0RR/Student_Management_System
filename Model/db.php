@@ -15,7 +15,8 @@
             die("Cannot connect to database: " . mysqli_connect_error());
         }
 
-        return $con; //db is here git change 2gi
+        return $con; //db is here git change 2gi lmfao no 2 ?git
     }
 
 ?>
+ 

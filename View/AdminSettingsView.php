@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 session_start();
 
 
@@ -41,7 +41,7 @@ if (!isset($_SESSION['visited_profile']) || $_SESSION['visited_profile'] !== tru
     header("Location: teacherprofile.php?error=Visit profile first");
     exit();
 }
-?> -->
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -341,7 +341,7 @@ if (!isset($_SESSION['visited_profile']) || $_SESSION['visited_profile'] !== tru
     
     <div class="overview-container" id="newAdminContainer">
       <h2>New Admin</h2>
-      <form id="newAdminForm" onsubmit="return validateNewAdminForm()">
+      <form method="post" action="../Controller/AdminSettingsController" id="newAdminForm" onsubmit="return validateNewAdminForm()">
         <div class="form-group">
           <label for="newAdminEmail">Email:</label>
           <input type="email" id="newAdminEmail" required>
@@ -350,7 +350,7 @@ if (!isset($_SESSION['visited_profile']) || $_SESSION['visited_profile'] !== tru
           <label for="newAdminPassword">Password:</label>
           <input type="password" id="newAdminPassword" required>
         </div>
-        <button class="form-button" type="submit">Create</button>
+        <button class="form-button" type="submit" onclick="handleAdminFormSubmit()">Create</button>
       </form>
     </div>
 
@@ -394,28 +394,59 @@ if (!isset($_SESSION['visited_profile']) || $_SESSION['visited_profile'] !== tru
 
   
   <script>
-   function validateNewAdminForm() {
-      const email = document.getElementById("newAdminEmail").value;
-      const password = document.getElementById("newAdminPassword").value;
+  function handleAdminFormSubmit() {
+    const form = document.getElementById('newAdminForm');
 
-      if (!email || !password) {
-        alert("Please fill in all fields.");
-        return false;
-      }
-      alert("New Admin created successfully!");
-      return true;
+    if (validateNewAdminForm()) {
+        
+        const formData = {
+            email: document.getElementById('newAdminEmail').value,
+            password: document.getElementById('newAdminPassword').value
+        };
+         const jsonData = JSON.stringify(formData);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '../Controller/AdminSettingsController.php', true);
+       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+       xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    console.log('Success:', response);
+                    alert('Admin created successfully!');
+                    form.reset();
+                } else {
+                    console.error('Error:', xhr.status, xhr.statusText);
+                    alert('Failed to create admin. Please try again.');
+                }
+            }
+        };
+       xhr.send(jsonData);
     }
 
-    function confirmDelete() {
-      const email = document.getElementById("deleteAdminEmail").value;
-      if (!email) {
-        alert("Please enter an email to delete.");
-        return false;
-      }
+    return false; 
+}
 
-      const confirmDelete = confirm("Are you sure you want to delete this Admin?");
-      return confirmDelete;
+
+function validateNewAdminForm() {
+    const email = document.getElementById('newAdminEmail').value;
+    const password = document.getElementById('newAdminPassword').value;
+    
+   
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address');
+        return false;
     }
+
+  
+    if (password.length < 8) {
+        alert('Password must be at least 8 characters long');
+        return false;
+    }
+
+    return true;
+}
 
   </script>
 
