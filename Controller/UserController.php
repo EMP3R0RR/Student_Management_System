@@ -1,11 +1,9 @@
 <?php
 session_start();
 require_once('../Model/UserModel.php');
-//amar name punno
 
-$error_message = "";
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+function validateCredentials () {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $role = isset($_POST['role']) ? trim($_POST['role']) : '';
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
@@ -14,75 +12,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $valid_roles = ['student', 'teacher', 'admin'];
 
     if (empty($role) || !in_array($role, $valid_roles)) {
-        $_SESSION['error'] = "Please select a valid role";
-           header("Location: ../View/LoginView.php");
-            exit();
+        echo "Please select a valid role";
+        return false;
+
     } elseif (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-       $_SESSION['error'] = "Please enter a valid email";
-             header("Location: ../View/LoginView.php");
-             exit();
+        echo "Please enter a valid email";
+        return false;
+
     } elseif (empty($password)) {
-        $_SESSION['error'] = "Please enter a password";
-             header("Location: ../View/LoginView.php");
-             exit();
+        echo "Please enter a password";
+          return false;
+
     } else{
-        
-        $user = getUserByEmailAndRole($email, $role);
 
-        if ($user && password_verify($password, $user['password'])) {
- 
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['role'] = $user['role'];
-            $_SESSION['email'] = $user['email'];
-
-            session_regenerate_id(true);
-
-            $role_pages = [
-                'student' => '../View/StudentProfileView.php',
-                'teacher' => '../View/TeacherProfileView.php',
-                'admin'   => '../View/AdminDashboardView.php'
-            ];
-
-            header("Location: " . $role_pages[$role]);
-            exit();
-        } else {
-            $_SESSION['error'] = "Invalid email, password, or role";
-             header("Location: ../View/LoginView.php");
-             exit();
-            
-        }
-        
-    }
-    // elseif ((!empty($email) || !empty($password))){
-
-    //     $user = getAdminByEmailAndRole($email, $role);
-
-    //     if ($user && password_verify($password, $user['password'])) {
-
-    //         $_SESSION['user_id'] = $user['id'];
-    //         $_SESSION['role'] = $user['role'];
-    //         $_SESSION['email'] = $user['email'];
-
-    //         session_regenerate_id(true);
-
-    //         $role_pages = [
-    //             'student' => '../View/StudentProfileView.php',
-    //             'teacher' => '../View/TeacherProfileView.php',
-    //             'admin'   => '../View/AdminDashboardView.php'
-    //         ];
-
-    //         header("Location: " . $role_pages[$role]);
-    //         exit();
-    //     } else {
-    //         $_SESSION['error'] = "Invalid email, password, or role";
-    //          header("Location: ../View/LoginView.php");
-    //          exit();
-            
-    //     }
-
-    // }
-        
-      
+        return true;     
+    }      
 }
+
+}
+
+function userLogin(){
+
+    $role = trim($_POST['role']) ;
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+    $user = [
+        'email' => $email,
+        'password' => $password
+    ];
+
+    $status= loginUser($user);
+    
+    if ($status)
+    {
+
+    }
+
+}
+
 
 ?>
